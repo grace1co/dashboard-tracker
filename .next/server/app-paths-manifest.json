@@ -1,0 +1,11 @@
+{
+  "/not-found": "app/not-found.js",
+  "/weekly/page": "app/weekly/page.js",
+  "/page": "app/page.js",
+  "/api/wins/route": "app/api/wins/route.js",
+  "/api/tasks/route": "app/api/tasks/route.js",
+  "/api/settings/route": "app/api/settings/route.js",
+  "/api/events/route": "app/api/events/route.js",
+  "/api/habits/gym-count/route": "app/api/habits/gym-count/route.js",
+  "/api/books/route": "app/api/books/route.js"
+}

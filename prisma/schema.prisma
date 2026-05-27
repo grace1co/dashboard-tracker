@@ -1,0 +1,299 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Task {
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  status      TaskStatus @default(NOT_STARTED)
+  priority    Priority   @default(MEDIUM)
+  dueDate     DateTime?
+  completedAt DateTime?
+  weekOf      DateTime?
+  category    String?
+  isRecurring Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@map("tasks")
+}
+
+model Goal {
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  type        GoalType
+  status      GoalStatus @default(IN_PROGRESS)
+  progress    Int        @default(0)
+  targetDate  DateTime?
+  year        Int
+  quarter     Int?
+  month       Int?
+  category    String?
+  subtasks    SubTask[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@map("goals")
+}
+
+model SubTask {
+  id          String   @id @default(cuid())
+  title       String
+  completed   Boolean  @default(false)
+  goalId      String
+  goal        Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@map("subtasks")
+}
+
+model Habit {
+  id          String            @id @default(cuid())
+  name        String
+  description String?
+  emoji       String?
+  color       String            @default("#6B9080")
+  frequency   HabitFrequency    @default(DAILY)
+  targetDays  Int               @default(7)
+  streak      Int               @default(0)
+  bestStreak  Int               @default(0)
+  isActive    Boolean           @default(true)
+  completions HabitCompletion[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@map("habits")
+}
+
+model HabitCompletion {
+  id          String   @id @default(cuid())
+  habitId     String
+  habit       Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  completedAt DateTime @default(now())
+  note        String?
+
+  @@unique([habitId, completedAt])
+  @@map("habit_completions")
+}
+
+model Book {
+  id          String     @id @default(cuid())
+  title       String
+  author      String
+  status      BookStatus @default(WANT_TO_READ)
+  rating      Int?
+  startedAt   DateTime?
+  finishedAt  DateTime?
+  notes       String?
+  coverUrl    String?
+  genre       String?
+  pageCount   Int?
+  currentPage Int?
+  month       Int?
+  year        Int?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@map("books")
+}
+
+model CalendarEvent {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  startTime   DateTime
+  endTime     DateTime?
+  location    String?
+  color       String?
+  isAllDay    Boolean  @default(false)
+  googleId    String?  @unique
+  source      String   @default("manual")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("calendar_events")
+}
+
+model Reflection {
+  id           String         @id @default(cuid())
+  type         ReflectionType
+  period       String
+  year         Int
+  month        Int?
+  quarter      Int?
+  wentRight    String?
+  wentWrong    String?
+  toChange     String?
+  freeform     String?
+  wantToBecome String?
+  focusOn      String?
+  supportHabits String?
+  noLongerAvailable String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@map("reflections")
+}
+
+model Finance {
+  id          String      @id @default(cuid())
+  title       String
+  category    FinanceType
+  target      Float
+  current     Float       @default(0)
+  currency    String      @default("USD")
+  deadline    DateTime?
+  year        Int
+  quarter     Int?
+  notes       String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@map("finances")
+}
+
+model BucketListItem {
+  id          String            @id @default(cuid())
+  title       String
+  description String?
+  category    BucketCategory
+  status      BucketStatus      @default(NOT_STARTED)
+  targetDate  DateTime?
+  completedAt DateTime?
+  notes       String?
+  imageUrl    String?
+  link        String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@map("bucket_list_items")
+}
+
+model Win {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  weekOf      DateTime
+  month       Int
+  year        Int
+  category    String?
+  createdAt   DateTime @default(now())
+
+  @@map("wins")
+}
+
+model DashboardSettings {
+  id            String  @id @default(cuid())
+  primaryColor  String  @default("#6B9080")
+  accentColor   String  @default("#D4856A")
+  weeklyFocus   String?
+  userName      String  @default("Friend")
+  phoneNumber   String?
+  smsEnabled    Boolean @default(false)
+  morningTime   String  @default("07:00")
+  eveningTime   String  @default("21:00")
+  timezone      String  @default("America/New_York")
+  updatedAt     DateTime @updatedAt
+
+  @@map("dashboard_settings")
+}
+
+model SmsLog {
+  id          String      @id @default(cuid())
+  direction   SmsDirection
+  message     String
+  processed   Boolean     @default(false)
+  action      String?
+  createdAt   DateTime    @default(now())
+
+  @@map("sms_logs")
+}
+
+enum TaskStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  OVERDUE
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum GoalType {
+  YEARLY
+  QUARTERLY
+  MONTHLY
+  WEEKLY
+}
+
+enum GoalStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  PAUSED
+}
+
+enum HabitFrequency {
+  DAILY
+  WEEKLY
+  WEEKDAYS
+  WEEKENDS
+}
+
+enum BookStatus {
+  WANT_TO_READ
+  READING
+  COMPLETED
+  DNF
+}
+
+enum ReflectionType {
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+enum FinanceType {
+  SAVINGS
+  INVESTMENT
+  DEBT_PAYOFF
+  BUDGET
+  INCOME_GOAL
+}
+
+enum BucketCategory {
+  TRAVEL
+  CAREER
+  RELATIONSHIPS
+  HEALTH
+  EXPERIENCES
+  FUN
+  PERSONAL_GROWTH
+  CREATIVITY
+}
+
+enum BucketStatus {
+  NOT_STARTED
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum SmsDirection {
+  INBOUND
+  OUTBOUND
+}

@@ -1,0 +1,137 @@
+/* app/globals.css */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-playfair: 'Playfair Display', Georgia, serif;
+  --font-dm-sans: 'DM Sans', system-ui, sans-serif;
+  --color-primary: #6B9080;
+  --color-accent: #D4856A;
+  --color-bg: #fdfcf8;
+  --color-surface: #ffffff;
+  --color-border: #ede6d3;
+  --color-text: #2c3e35;
+  --color-muted: #7a8c84;
+  --bottom-nav-height: 68px;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-dm-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #aaa; }
+
+/* Mobile padding for bottom nav */
+.page-content {
+  padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom) + 1rem);
+}
+
+@media (min-width: 768px) {
+  .page-content {
+    padding-bottom: 2rem;
+  }
+}
+
+/* Typography */
+h1, h2, h3 {
+  font-family: var(--font-playfair);
+  letter-spacing: -0.02em;
+}
+
+/* Card base */
+.card {
+  @apply bg-white rounded-2xl shadow-card border border-cream-200 p-4;
+}
+
+.card-hover {
+  @apply card transition-all duration-200 hover:shadow-card-hover hover:-translate-y-0.5 cursor-pointer;
+}
+
+/* Progress bar */
+.progress-track {
+  @apply w-full h-2 bg-cream-200 rounded-full overflow-hidden;
+}
+.progress-fill {
+  @apply h-full rounded-full transition-all duration-700 ease-out;
+}
+
+/* Checkbox */
+.habit-check {
+  @apply w-7 h-7 rounded-xl border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0;
+  min-width: 28px;
+  min-height: 28px;
+}
+
+/* Status badges */
+.badge {
+  @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium;
+}
+
+/* Mobile touch targets */
+.touch-target {
+  @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+}
+
+/* PWA standalone mode */
+@media (display-mode: standalone) {
+  body {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .mobile-nav {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Skeleton loading */
+.skeleton {
+  @apply bg-cream-200 rounded-lg animate-pulse;
+}
+
+/* Stagger animations */
+.stagger-1 { animation-delay: 0ms; }
+.stagger-2 { animation-delay: 60ms; }
+.stagger-3 { animation-delay: 120ms; }
+.stagger-4 { animation-delay: 180ms; }
+.stagger-5 { animation-delay: 240ms; }
+.stagger-6 { animation-delay: 300ms; }
+
+/* Smooth transitions */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input, textarea, select {
+  font-family: var(--font-dm-sans);
+}
+
+/* Focus styles */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
