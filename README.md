@@ -1,6 +1,14 @@
-# 🌿 My Life Dashboard
+# Cloud Dashboard
 
 A personal, mobile-first life dashboard built with Next.js 14, Tailwind CSS, Neon Postgres, Prisma, and PWA support. Track goals, habits, tasks, books, reflections, bucket list items — and get daily SMS summaries.
+
+---
+
+## Why I Built This
+
+I tried tools like Notion, but I realized I spent more time organizing systems than actually using them. I wanted something tailored to the way I personally think and plan, so I built my own dashboard that combines task tracking, habit systems, reflections, and reminders into one place.
+
+One of my favorite features is the SMS automation that lets me update my dashboard just by texting myself throughout the day.
 
 ---
 

@@ -120,7 +120,7 @@ export default function SettingsPage() {
         <FormInput
           label="Your name"
           value={settings.userName}
-          onChange={(e) => update('userName', e.target.value)}
+          onChange={(value) => update('userName', value)}
           placeholder="Alex"
         />
         <p className="text-sm text-forest-400 -mt-2">
@@ -139,7 +139,7 @@ export default function SettingsPage() {
         <FormSelect
           label="Color theme"
           value={settings.theme}
-          onChange={(e) => update('theme', e.target.value)}
+          onChange={(value) => update('theme', value)}
           options={THEMES}
         />
         <p className="text-sm text-forest-400 -mt-2">Theme switching — full implementation coming soon.</p>
@@ -148,7 +148,7 @@ export default function SettingsPage() {
           <FormSelect
             label="Week starts on"
             value={settings.weekStartsOn.toString()}
-            onChange={(e) => update('weekStartsOn', parseInt(e.target.value))}
+            onChange={(value) => update('weekStartsOn', parseInt(value))}
             options={[
               { value: '0', label: 'Sunday' },
               { value: '1', label: 'Monday' },
@@ -168,7 +168,7 @@ export default function SettingsPage() {
         <FormSelect
           label="Timezone"
           value={settings.timezone}
-          onChange={(e) => update('timezone', e.target.value)}
+          onChange={(value) => update('timezone', value)}
           options={TIMEZONES.map((tz) => ({ value: tz, label: tz.replace('_', ' ') }))}
         />
         <div className="grid grid-cols-2 gap-4 mt-4">
@@ -176,13 +176,13 @@ export default function SettingsPage() {
             label="Morning text time"
             type="time"
             value={settings.morningTextTime}
-            onChange={(e) => update('morningTextTime', e.target.value)}
+            onChange={(value) => update('morningTextTime', value)}
           />
           <FormInput
             label="Evening check-in time"
             type="time"
             value={settings.eveningTextTime}
-            onChange={(e) => update('eveningTextTime', e.target.value)}
+            onChange={(value) => update('eveningTextTime', value)}
           />
         </div>
       </Card>
@@ -216,7 +216,7 @@ export default function SettingsPage() {
           <FormInput
             label="Your phone number (E.164 format)"
             value={settings.phoneNumber ?? ''}
-            onChange={(e) => update('phoneNumber', e.target.value)}
+            onChange={(value) => update('phoneNumber', value)}
             placeholder="+12125551234"
           />
         </div>

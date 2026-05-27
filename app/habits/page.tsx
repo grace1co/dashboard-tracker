@@ -66,7 +66,11 @@ export default function HabitsPage() {
         );
       } else {
         await fetch(`/api/habits/${habit.id}/complete`, { method: "POST" });
-        setTodayCompletions((prev) => new Set([...prev, habit.id]));
+        setTodayCompletions((prev) => {
+        const next = new Set(prev);
+        next.add(habit.id);
+        return next;
+      });
         setHabits((prev) =>
           prev.map((h) =>
             h.id === habit.id

@@ -252,7 +252,7 @@ export default function YearlyPage() {
             <FormTextarea
               key={key}
               label={`${icon} ${q}`}
-              value={reflection[key as keyof YearlyReflection]}
+              value={reflection[key as keyof YearlyReflection] ?? ""}
               onChange={(v) => setReflection({ ...reflection, [key]: v })}
               placeholder={hint}
               rows={3}

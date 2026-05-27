@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 
 export async function PATCH(
   req: NextRequest,
@@ -10,29 +10,28 @@ export async function PATCH(
     const { completed, title } = body
 
     const updateData: Record<string, unknown> = {}
+
     if (title !== undefined) updateData.title = title
-    if (completed !== undefined) {
-      updateData.completed = completed
-      updateData.completedAt = completed ? new Date() : null
-    }
+    if (completed !== undefined) updateData.completed = completed
 
     const updated = await prisma.subTask.update({
       where: { id: params.subtaskId },
       data: updateData,
     })
 
-    // Recalculate parent goal progress based on subtask completion
     const allSubtasks = await prisma.subTask.findMany({
       where: { goalId: params.id },
     })
+
     if (allSubtasks.length > 0) {
       const completedCount = allSubtasks.filter((s) => s.completed).length
       const newProgress = Math.round((completedCount / allSubtasks.length) * 100)
+
       await prisma.goal.update({
         where: { id: params.id },
         data: {
           progress: newProgress,
-          ...(newProgress === 100 ? { status: 'COMPLETED', completedAt: new Date() } : {}),
+          status: newProgress === 100 ? 'COMPLETED' : 'IN_PROGRESS',
         },
       })
     }
@@ -50,6 +49,7 @@ export async function DELETE(
 ) {
   try {
     await prisma.subTask.delete({ where: { id: params.subtaskId } })
+
     return NextResponse.json({ success: true })
   } catch (err) {
     console.error(err)
